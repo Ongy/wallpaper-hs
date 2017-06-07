@@ -144,7 +144,7 @@ main = do
   db <- readDB
   mons <- getMonitors
   hPutStr stderr "Working with monitors: "
-  hPutStr stderr $ show mons
+  hPutStrLn stderr $ show mons
 
   let keys = M.keys db
   files <- listDirectoryRecursive "."
