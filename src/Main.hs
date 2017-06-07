@@ -4,7 +4,6 @@
 module Main where
 
 import System.IO.Unsafe (unsafePerformIO)
-import Debug.Trace (trace)
 import GHC.Generics
 
 import System.Process (callProcess)
@@ -105,7 +104,7 @@ listDirectoryRecursive dir = do
     else do
       fexists <- doesFileExist dir
       if fexists
-        then return [dir]
+        then pure $ pure dir
         else error ("Coult not find directory: " ++ dir)
 
 addImage :: String -> IO DB -> IO DB
@@ -123,8 +122,8 @@ suitableForMon :: DB -> Monitor -> DB
 suitableForMon db (mw, mh) = M.filter isOK db
   where isOK (Image _ iw ih) = let w = fromIntegral iw / fromIntegral mw
                                    h = fromIntegral ih / fromIntegral mh
-                                   rel = if w > h then (w - h) / w else (h - w) / h in
-                                     trace (show rel) rel < 0.10
+                                   rel = if w > h then (w - h) / w else (h - w) / h
+                                in rel < 0.10
 
 
 chooseRandom :: DB -> IO String
