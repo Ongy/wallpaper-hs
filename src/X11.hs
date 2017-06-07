@@ -19,7 +19,7 @@ import Graphics.X11.Xlib.Display
     ( openDisplay
     , closeDisplay
     , screenCount
-    , rootWindow
+    , defaultRootWindow
     )
 
 import System.IO
@@ -42,13 +42,15 @@ crtcToMon dsp res crtc = do
            , fromIntegral $ xrr_ci_height info)
 
 getScreenMons :: Display -> ScreenNumber -> IO [Monitor]
-getScreenMons dsp num = do
-    root <- rootWindow dsp num
+getScreenMons dsp _ = do
+    --root <- rootWindow dsp num
+    let root = defaultRootWindow dsp -- num
     (Just rrs) <- xrrGetScreenResources dsp root
     mapM (crtcToMon dsp rrs) $ xrr_sr_crtcs rrs
 
 getMonitors :: IO [Monitor]
 getMonitors = withDefaultDisplay $ \dsp -> do
-    let count = fromIntegral $ screenCount dsp
-    mons <- mapM (getScreenMons dsp) [0 .. count - 1]
-    pure $ concat mons
+--    let count = fromIntegral $ screenCount dsp
+--    mons <- mapM (getScreenMons dsp) [0 .. count - 1]
+    mons <- getScreenMons dsp 0
+    pure $ mons
