@@ -15,12 +15,14 @@ import System.IO (hPutStrLn, hPutStr, stderr, withFile, IOMode(..))
 import System.Environment (getArgs)
 import System.IO.Unsafe (unsafePerformIO)
 import qualified Codec.Picture as P
+import System.FilePath.Posix (takeDirectory)
 import System.Directory
     ( setCurrentDirectory
     , getHomeDirectory
     , doesFileExist
     , doesDirectoryExist
     , listDirectory
+    , createDirectoryIfMissing
     )
 
 import Data.Text (Text)
@@ -92,7 +94,9 @@ readDB = do
     else return mempty
 
 writeDB :: DB -> IO ()
-writeDB db = withFile dbPath WriteMode $ flip BS.hPutStr (encode db)
+writeDB db = do
+    createDirectoryIfMissing True $ takeDirectory dbPath
+    withFile dbPath WriteMode $ flip BS.hPutStr (encode db)
 
 listDirectoryRecursive :: String -> IO [String]
 listDirectoryRecursive dir = do

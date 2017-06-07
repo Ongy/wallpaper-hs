@@ -59,7 +59,7 @@ executable wallpaper-hs
   -- Other library packages from which modules are imported.
   build-depends:       base >=4.9 && <4.10, directory, store, bytestring,
                        containers, random, process, JuicyPixels, xdg-basedir,
-                       config-schema, config-value, text, X11
+                       config-schema, config-value, text, X11, filepath
   
   -- Directories containing source files.
   hs-source-dirs:      src
