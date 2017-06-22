@@ -53,4 +53,4 @@ getMonitors = withDefaultDisplay $ \dsp -> do
 --    let count = fromIntegral $ screenCount dsp
 --    mons <- mapM (getScreenMons dsp) [0 .. count - 1]
     mons <- getScreenMons dsp 0
-    pure $ mons
+    pure $ filter (\(x, y) -> x /= 0 && y /= 0) mons
